@@ -9,7 +9,7 @@ const { UserModel } = require("./models/User.model");
 const { blogRouter } = require("./routes/blog.routes");
 const { authentication } = require("./middlewares/authentication");
 
-const PORT=3001;
+const PORT=3000;
 
 const app = express();
 app.use(cors());
@@ -19,20 +19,25 @@ app.get("/", (req, res) => {
   res.send({message:"Base Api route"});
 });
 
-app.post("/signup", async (req, res) => {
-  let { name, email, password, contact } = req.body;
-  //   console.log(req.body);
-  bcrypt.hash(password, 4, async function (err, hash) {
+app.post("/signup", async (req, res)=> 
+{
+  let {name,email,password,contact} = req.body;
+
+  bcrypt.hash(password, 4, async function (err,hash)
+   {
     const new_user = new UserModel({
       name,
       email,
       password: hash,
       contact,
     });
-    try {
+    try 
+    {
       await new_user.save();
       res.send({message:"Signup successfully"});
-    } catch (error) {
+    } 
+    catch (error)
+     {
       console.log(error);
       res.status(500).send({message:"something went wrong! Try again later..."});
     }
@@ -44,7 +49,8 @@ app.post("/login", async (req, res) => {
   const user = await UserModel.findOne({ email });
   console.log(user);
 
-  if (!user) {
+  if (!user) 
+  {
     res.send({message:"sign up first!!!"});
   } else {
     const hashed_password = user.password;
